@@ -12,12 +12,15 @@ class Position(models.Model):
         ('CE', 'Chief Engineer'),
         ('LS', 'Line Specialist')
     )
-    status = models.CharField(choices=STATUS, max_length=2, verbose_name='')
-    responsibilities = models.TextField(verbose_name='')
+    status = models.CharField(choices=STATUS, max_length=2, verbose_name='Status')
+    responsibilities = models.TextField(verbose_name='Responsibilities')
 
     class Meta:
         verbose_name = 'Position'
         verbose_name_plural = 'Positions'
+
+    def __str__(self):
+        return 'Position {1}'.format(self.status)
 
 
 def upload_user_photo(instance, filename):
@@ -30,9 +33,11 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=32, verbose_name='First name')
     middle_name = models.CharField(max_length=32, verbose_name='Middle name')
     last_name = models.CharField(max_length=32, verbose_name='Last name')
-    photo = models.ImageField(upload_to='employee_images', null=True, blank=True, default='default.jpg')
-    position = models.ForeignKey(Position, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Employee position')
-    kpi = models.FloatField(verbose_name='KPI', default=0)
+    photo = models.ImageField(upload_to='employee_images', null=True, blank=True,
+                              default='default.jpg', verbose_name='Photo')
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, blank=True, null=True,
+                                 verbose_name='Employee position')
+    kpi = models.FloatField(verbose_name='KPI', default=0, help_text='KPI')
 
     class Meta:
         verbose_name = 'Employee'
@@ -42,15 +47,6 @@ class Employee(models.Model):
     def owner(self):
         return self.user
 
+    def __str__(self):
+        return 'Employee {1}'.format({self.user.username})
 
-class EmployeeWork(models.Model):
-    """"""
-    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='')
-    work = models.ForeignKey(to='shop.Work', on_delete=models.CASCADE, verbose_name='')
-
-    class Meta:
-        verbose_name = ''
-        verbose_name_plural = ''
-
-    def get_deadline_time(self):
-        return self.work.due_date - timezone.now()

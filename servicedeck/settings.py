@@ -29,9 +29,10 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'accounts',
+    'customers',
     'employee',
     'shop',
-
+    'works'
 ]
 
 MIDDLEWARE = [

@@ -10,3 +10,13 @@ class ShopApiView(generics.ListAPIView, mixins.CreateModelMixin):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+class ShopCreateAPIView(generics.CreateAPIView):
+    serializer_class = ShopSerializer
+
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        return serializer.save()

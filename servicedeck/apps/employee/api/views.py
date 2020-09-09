@@ -13,17 +13,26 @@ from .serializers import EmployeeSerializer, EmployeeSignUpSerializer
 from .paginations import EmployeePagination
 from employee.models import Employee
 
+from .serializers import EmployeeSignUpSerializer
 
-class EmployeeSignUpAPIView(generics.CreateAPIView):
+
+User = get_user_model()
+
+
+class EmployeeSignUpSignUp(generics.CreateAPIView):
+    serializer_class = EmployeeSignUpSerializer
     permission_classes = []
     authentication_classes = []
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSignUpSerializer
+    queryset = User.objects.all()
 
     def get_serializer_context(self, *args, **kwargs):
         return {'request': self.request}
-    #def post(self, request, *args, **kwargs):
-#        return self.create(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class SingUpEmployeeAPIView(APIView):

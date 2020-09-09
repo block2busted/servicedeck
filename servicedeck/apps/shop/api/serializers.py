@@ -32,13 +32,12 @@ class ShopSerializer(serializers.ModelSerializer):
     def get_works(self, object):
         data = {
             'works': Work.objects.filter(shop=object),
-            '': ''
         }
         return Work.objects.filter(shop=object)
 
 
-class ShopEngineerSerializer(serializers.ModelSerializer):
-    """Shop serializer to engineer."""
+class ShopCreateEngineerSerializer(serializers.ModelSerializer):
+    """Shop-Serializer to create by engineer."""
     class Meta:
         model = Shop
         fields = [
@@ -49,3 +48,4 @@ class ShopEngineerSerializer(serializers.ModelSerializer):
             'employees',
             'works'
         ]
+

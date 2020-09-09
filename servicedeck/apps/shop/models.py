@@ -1,30 +1,7 @@
-import json
-
 from django.db import models
-from django.core.serializers import serialize
 from employee.models import Employee
 
-
-class Work(models.Model):
-    """Work model"""
-    WORK_IMPORTANT = (
-        ('R', 'rush'),
-        ('U', 'usual'),
-        ('NR', 'not rush')
-    )
-    WORK_TYPE = (
-        ('SE', 'shop equipment'),
-        ('W', 'worldwide')
-    )
-    important = models.CharField(choices=WORK_IMPORTANT, max_length=2, verbose_name='important work')
-    type = models.CharField(choices=WORK_TYPE, max_length=2, verbose_name='Type')
-    is_active = models.BooleanField(default=True, verbose_name='Is active')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='created')
-    due_date = models.DateTimeField(verbose_name='Due date')
-
-    class Meta:
-        verbose_name = 'Work'
-        verbose_name_plural = 'Works'
+from works.models import Work
 
 
 class Shop(models.Model):
@@ -39,3 +16,6 @@ class Shop(models.Model):
     class Meta:
         verbose_name = 'Shop'
         verbose_name_plural = 'Shops'
+
+    def __str__(self):
+        return 'Shop {1}.'.format(self.title)

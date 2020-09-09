@@ -8,7 +8,7 @@ from accounts.api.serializers import UserSingUpSerializer
 
 
 class EmployeeSignUpSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField(read_only=True)#UserSingUpSerializer()#read_only=True)
+    user = UserSingUpSerializer(required=True)
 
     class Meta:
         model = Employee
@@ -23,24 +23,15 @@ class EmployeeSignUpSerializer(serializers.ModelSerializer):
             'kpi',
         ]
 
-    def create_user(self, validated_data):
-        User = get_user_model()
-        user_ser = UserSingUpSerializer()
-        user_obj = User()
-        user_obj.save()
-        return user_obj
-
     def create(self, validated_data):
-        employee_obj = Employee(
-            user=self.user,#validated_data.get('user'),
-            first_name=validated_data.get('first_name'),
-            middle_name=validated_data.get('middle_name'),
-            last_name=validated_data.get('last_name'),
-            position=validated_data.get('position'),
-            kpi=validated_data.get('kpi')
+        user_data = validated_data.pop('user')
+        user = UserSingUpSerializer.create(UserSingUpSerializer(), validated_data=user_data)
+        employee = Employee.objects.create(
+            user=user,
+            **validated_data
         )
-        employee_obj.save()
-        return employee_obj
+        employee.save()
+        return employee
 
 
 class EmployeeInlineUserSerializer(serializers.ModelSerializer):

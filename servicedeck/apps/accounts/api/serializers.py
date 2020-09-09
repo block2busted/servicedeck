@@ -93,30 +93,3 @@ class UserSingUpSerializer(serializers.ModelSerializer):
         user_obj.is_active = False
         user_obj.save()
         return user_obj
-
-
-class EmployeeSignUpSerializer(serializers.ModelSerializer):
-    user = UserSingUpSerializer(required=True)
-
-    class Meta:
-        model = Employee
-        fields = [
-            'pk',
-            'user',
-            'first_name',
-            'middle_name',
-            'last_name',
-            'photo',
-            'position',
-            'kpi',
-        ]
-
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user = UserSingUpSerializer.create(UserSingUpSerializer(), validated_data=user_data)
-        employee = Employee.objects.create(
-            user=user,
-            **validated_data
-        )
-        employee.save()
-        return employee
