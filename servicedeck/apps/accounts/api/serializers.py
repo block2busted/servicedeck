@@ -7,6 +7,9 @@ from rest_framework.reverse import reverse as api_reverse
 
 from django.contrib.auth import get_user_model
 
+from employee.models import Employee
+
+
 User = get_user_model()
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -32,6 +35,7 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
 
 class UserSingUpSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     token = serializers.SerializerMethodField(read_only=True)
     expires = serializers.SerializerMethodField(read_only=True)
@@ -77,6 +81,9 @@ class UserSingUpSerializer(serializers.ModelSerializer):
         token = jwt_encode_handler(payload)
         return token
 
+    def get_status(self, value):
+        return value
+
     def create(self, validated_data):
         user_obj = User(
             username=validated_data.get('username'),
@@ -86,3 +93,30 @@ class UserSingUpSerializer(serializers.ModelSerializer):
         user_obj.is_active = False
         user_obj.save()
         return user_obj
+
+
+class EmployeeSignUpSerializer(serializers.ModelSerializer):
+    user = UserSingUpSerializer(required=True)
+
+    class Meta:
+        model = Employee
+        fields = [
+            'pk',
+            'user',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'photo',
+            'position',
+            'kpi',
+        ]
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = UserSingUpSerializer.create(UserSingUpSerializer(), validated_data=user_data)
+        employee = Employee.objects.create(
+            user=user,
+            **validated_data
+        )
+        employee.save()
+        return employee

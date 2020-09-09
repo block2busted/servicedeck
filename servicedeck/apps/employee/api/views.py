@@ -1,16 +1,40 @@
 import json
 
-from django.db.models import Q
+from django.contrib.auth import get_user_model
 from rest_framework import generics, mixins
 from rest_framework.authentication import SessionAuthentication
 from rest_framework import permissions
+from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from django.shortcuts import get_object_or_404
-
-from .serializers import EmployeeSerializer
+from accounts.api.permissions import IsOwnerOrReadOnly
+from .serializers import EmployeeSerializer, EmployeeSignUpSerializer
 from .paginations import EmployeePagination
 from employee.models import Employee
+
+
+class EmployeeSignUpAPIView(generics.CreateAPIView):
+    permission_classes = []
+    authentication_classes = []
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSignUpSerializer
+
+    def get_serializer_context(self, *args, **kwargs):
+        return {'request': self.request}
+    #def post(self, request, *args, **kwargs):
+#        return self.create(request, *args, **kwargs)
+
+
+class SingUpEmployeeAPIView(APIView):
+    serializer_class = EmployeeSerializer
+
+    def post(self, request, *args, **kwargs):
+        User = get_user_model()
+        username = request.get('username')
+        password = request.get('password')
+        user = User(username=username, password=password)
+        return
 
 
 def is_json(json_data):
@@ -21,9 +45,6 @@ def is_json(json_data):
     except ValueError:
         is_valid = False
     return is_valid
-
-
-from accounts.api.permissions import IsOwnerOrReadOnly
 
 
 class EmployeeDetailAPIView(

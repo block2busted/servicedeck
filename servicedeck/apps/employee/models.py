@@ -1,3 +1,6 @@
+import datetime
+from django.utils import timezone
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -17,22 +20,13 @@ class Position(models.Model):
         verbose_name_plural = 'Positions'
 
 
-class EmployeeQuerySet(models.QuerySet):
-    """"""
-
-
-class EmployeeManager(models.Manager):
-    def get_queryset(self):
-        return EmployeeQuerySet(self.model, using=self._db)
-
-
 def upload_user_photo(instance, filename):
     return 'employee/{username}{filename}'.format(username=instance.username, filename=filename)
 
 
 class Employee(models.Model):
     """"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Employee username')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Employee username')
     first_name = models.CharField(max_length=32, verbose_name='First name')
     middle_name = models.CharField(max_length=32, verbose_name='Middle name')
     last_name = models.CharField(max_length=32, verbose_name='Last name')
@@ -58,3 +52,5 @@ class EmployeeWork(models.Model):
         verbose_name = ''
         verbose_name_plural = ''
 
+    def get_deadline_time(self):
+        return self.work.due_date - timezone.now()

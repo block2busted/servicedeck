@@ -29,3 +29,5 @@ class UserDetailSerializer(serializers.ModelSerializer):
     #    qs = object.employee_set.all()
     #    request = self.context.get('request')
     #    return EmployeeInlineUserSerializer(qs, many=True, context={'request': request}).data
+
+

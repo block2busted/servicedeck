@@ -49,3 +49,22 @@ class SignUpAPIView(generics.CreateAPIView):
 
     def get_serializer_context(self, *args, **kwargs):
         return {'request': self.request}
+
+
+from .serializers import EmployeeSignUpSerializer
+
+
+class SignUp(generics.CreateAPIView):
+    serializer_class = EmployeeSignUpSerializer
+    permission_classes = []
+    authentication_classes = []
+    queryset = User.objects.all()
+
+    def get_serializer_context(self, *args, **kwargs):
+        return {'request': self.request}
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save()
