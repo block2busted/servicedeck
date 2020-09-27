@@ -165,7 +165,6 @@ class EmployeeCRUDAPIView(
         if is_json(request.body):
             json_data = json.loads(request.body)
         new_pk = json_data.get('pk')
-        print(json_data, new_pk)
         if pk is not None:
             return self.retrieve(request, *args, **kwargs)
         return self.update(request, *args, **kwargs)
@@ -176,7 +175,6 @@ class EmployeeCRUDAPIView(
         if is_json(request.body):
             json_data = json.loads(request.body)
         new_pk = json_data.get('pk')
-        print(json_data, new_pk)
         if pk is not None:
             return self.retrieve(request, *args, **kwargs)
         return self.destroy(request, *args, **kwargs)

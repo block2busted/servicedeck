@@ -7,18 +7,26 @@ from employee.models import Employee
 class Work(models.Model):
     """Work model"""
     WORK_IMPORTANT = (
-        ('R', 'rush'),
-        ('U', 'usual'),
-        ('NR', 'not rush')
+        ('Rush', 'rush'),
+        ('Usual', 'usual'),
+        ('Not Rush', 'not rush')
     )
     WORK_TYPE = (
-        ('SE', 'shop equipment'),
-        ('W', 'worldwide')
+        ('Shop Equipment', 'shop equipment'),
+        ('Worldwide', 'worldwide')
     )
-    important = models.CharField(choices=WORK_IMPORTANT, max_length=2, verbose_name='important work')
-    type = models.CharField(choices=WORK_TYPE, max_length=2, verbose_name='Type')
+    WORK_STATUS = (
+        ('Is Free', 'Is Free'),
+        ('In Process', 'In Process'),
+        ('Ended', 'Ended')
+    )
+
+    title = models.CharField(max_length=128, default='', verbose_name='Title')
+    important = models.CharField(choices=WORK_IMPORTANT, max_length=8, verbose_name='important work')
+    type = models.CharField(choices=WORK_TYPE, max_length=14, verbose_name='Type')
     description = models.TextField(verbose_name='Description', default='')
     is_active = models.BooleanField(default=True, verbose_name='Is active')
+    status = models.CharField(choices=WORK_STATUS, max_length=10, default='Is Free', verbose_name='status')
     created = models.DateTimeField(auto_now_add=True, verbose_name='created')
     due_date = models.DateTimeField(verbose_name='Due date')
 
@@ -27,7 +35,10 @@ class Work(models.Model):
         verbose_name_plural = 'Works'
 
     def __str__(self):
-        return 'Work {1}.'.format(self.description)
+        return 'Work {}.'.format(self.description)
+
+    def update_status(self, value):
+        self.status = value
 
 
 class EmployeeWork(models.Model):
@@ -40,7 +51,7 @@ class EmployeeWork(models.Model):
         verbose_name_plural = 'Employee works'
 
     def __str__(self):
-        return 'Work {1} by {2} {3} employee.'.format(self.work.title, self.employee.first_name, self.employee.last_name)
+        return 'Work {} by {} {} employee.'.format(self.work.title, self.employee.first_name, self.employee.last_name)
 
     def get_deadline_time(self):
         return self.work.due_date - timezone.now()

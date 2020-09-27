@@ -21,6 +21,7 @@ expire_delta = api_settings.JWT_REFRESH_EXPIRATION_DELTA
 class UserPublicSerializer(serializers.ModelSerializer):
     """"""
     uri = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = User
         fields = [

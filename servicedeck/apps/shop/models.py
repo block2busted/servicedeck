@@ -18,4 +18,4 @@ class Shop(models.Model):
         verbose_name_plural = 'Shops'
 
     def __str__(self):
-        return 'Shop {1}.'.format(self.title)
+        return 'Shop {}.'.format(self.title)

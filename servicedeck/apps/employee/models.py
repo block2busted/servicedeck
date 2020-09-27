@@ -1,6 +1,3 @@
-import datetime
-from django.utils import timezone
-
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -20,7 +17,7 @@ class Position(models.Model):
         verbose_name_plural = 'Positions'
 
     def __str__(self):
-        return 'Position {1}'.format(self.status)
+        return 'Position {}'.format(self.status)
 
 
 def upload_user_photo(instance, filename):
@@ -48,5 +45,5 @@ class Employee(models.Model):
         return self.user
 
     def __str__(self):
-        return 'Employee {1}'.format({self.user.username})
+        return 'Employee {}'.format({self.user.username})
 

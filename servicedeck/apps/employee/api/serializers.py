@@ -87,15 +87,3 @@ class EmployeeSerializer(serializers.ModelSerializer):
     def get_uri(self, object):
         request = self.context.get('request')
         return api_reverse('api-employee:employee-detail', kwargs={'pk': object.pk}, request=request)
-
-    #def create(self, validated_data):
-    #    employee_obj = Employee(
-    #        user=validated_data.get('user'),
-    #        first_name=validated_data.get('first_name'),
-    #        middle_name=validated_data.get('middle_name'),
-    #        last_name=validated_data.get('last_name'),
-    #        position=validated_data.get('position'),
-    #        kpi_name=validated_data.get('kpi')
-    #    )
-    #    #employee_obj.save()
-    #    return employee_obj

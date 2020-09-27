@@ -104,7 +104,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter'
     ],
     'SEARCH_PARAM': 'q',
-    'ORDERING_PARAM': 'ordering'
+    'ORDERING_PARAM': 'ordering',
+    'DATETIME_FORMAT': "%d-%m-%Y %H:%m"
 }
 
 JWT_AUTH = {

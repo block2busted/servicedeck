@@ -24,10 +24,3 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def get_uri(self, object):
         request = self.context.get('request')
         return api_reverse('api-user:user-detail', kwargs={'username': object.username}, request=request)
-
-    #def get_employee_list(self, object):
-    #    qs = object.employee_set.all()
-    #    request = self.context.get('request')
-    #    return EmployeeInlineUserSerializer(qs, many=True, context={'request': request}).data
-
-
